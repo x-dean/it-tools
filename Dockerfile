@@ -20,10 +20,13 @@ RUN ls /app || true
 # Install global Grunt CLI
 RUN npm install -g grunt-cli
 
-# Install project dependencies (including Grunt)
-RUN npm install --legacy-peer-deps --no-audit --no-fund
+# Run npm install with verbose logging and additional flags for debugging
+RUN npm install --legacy-peer-deps --no-audit --no-fund --verbose || true
 
-# Debug: Check if Grunt is installed locally
+# Debug: List the installed packages to confirm installation
+RUN npm list --depth=0 || true
+
+# Debug: Check for grunt specifically
 RUN npm ls grunt || true
 RUN npm ls grunt-cli || true
 
