@@ -14,8 +14,8 @@ WORKDIR /app
 # Clone the CyberChef repository
 RUN git clone https://github.com/gchq/CyberChef.git /app
 
-# Install dependencies
-RUN npm install
+# Install Grunt CLI globally and project dependencies
+RUN npm install -g grunt-cli && npm install
 
 # Build the production version of CyberChef
 RUN npm run build:prod
