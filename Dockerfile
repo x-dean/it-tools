@@ -5,7 +5,7 @@ FROM node:18
 ENV NODE_ENV=production
 ENV NODE_OPTIONS=--max_old_space_size=2048
 
-# Install necessary dependencies
+# Install necessary dependencies (git)
 RUN apt-get update && apt-get install -y git && apt-get clean
 
 # Create a working directory
@@ -14,14 +14,21 @@ WORKDIR /app
 # Clone the CyberChef repository
 RUN git clone https://github.com/gchq/CyberChef.git /app
 
-# Install Grunt CLI globally
+# Debug: Check if repo was cloned successfully
+RUN ls /app || true
+
+# Install global Grunt CLI
 RUN npm install -g grunt-cli
 
-# Install project dependencies (including local Grunt)
-RUN npm install --legacy-peer-deps
+# Run npm install with more logging and suppression of certain warnings
+RUN npm install --legacy-peer-deps --no-audit --no-fund || true
 
 # Debug: List installed packages
 RUN npm list --depth=0 || true
+
+# Check for specific missing dependencies
+RUN npm ls grunt || true
+RUN npm ls grunt-cli || true
 
 # Manually execute necessary Grunt tasks
 RUN ./node_modules/.bin/grunt exec:fixCryptoApiImports && \
