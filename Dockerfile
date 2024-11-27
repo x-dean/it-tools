@@ -20,17 +20,17 @@ RUN ls /app || true
 # Install global Grunt CLI
 RUN npm install -g grunt-cli
 
-# Run npm install with more logging and suppression of certain warnings
-RUN npm install --legacy-peer-deps --no-audit --no-fund || true
+# Install project dependencies (including Grunt)
+RUN npm install --legacy-peer-deps --no-audit --no-fund
 
-# Debug: List installed packages
-RUN npm list --depth=0 || true
-
-# Check for specific missing dependencies
+# Debug: Check if Grunt is installed locally
 RUN npm ls grunt || true
 RUN npm ls grunt-cli || true
 
-# Manually execute necessary Grunt tasks
+# List all node_modules binaries (including grunt)
+RUN ls ./node_modules/.bin/ || true
+
+# Manually execute necessary Grunt tasks with full path
 RUN ./node_modules/.bin/grunt exec:fixCryptoApiImports && \
     ./node_modules/.bin/grunt exec:fixSnackbarMarkup && \
     ./node_modules/.bin/grunt exec:fixJimpModule
