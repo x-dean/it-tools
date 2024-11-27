@@ -17,13 +17,16 @@ RUN git clone https://github.com/gchq/CyberChef.git /app
 # Install Grunt CLI globally
 RUN npm install -g grunt-cli
 
-# Temporarily disable postinstall scripts and install dependencies
-RUN npm_config_ignore_scripts=true npm install --legacy-peer-deps
+# Install project dependencies (including local Grunt)
+RUN npm install --legacy-peer-deps
+
+# Debug: List installed packages
+RUN npm list --depth=0 || true
 
 # Manually execute necessary Grunt tasks
-RUN npx grunt exec:fixCryptoApiImports && \
-    npx grunt exec:fixSnackbarMarkup && \
-    npx grunt exec:fixJimpModule
+RUN ./node_modules/.bin/grunt exec:fixCryptoApiImports && \
+    ./node_modules/.bin/grunt exec:fixSnackbarMarkup && \
+    ./node_modules/.bin/grunt exec:fixJimpModule
 
 # Build the production version of CyberChef
 RUN npm run build:prod
