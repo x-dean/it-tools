@@ -17,8 +17,9 @@ RUN git clone https://github.com/gchq/CyberChef.git /app
 # Debug: Check if repo was cloned successfully
 RUN ls /app || true
 
-# Install global Grunt CLI
-RUN npm install -g grunt-cli
+# Install global Grunt CLI and local Grunt as a project dependency
+RUN npm install -g grunt-cli && \
+    npm install grunt --save-dev
 
 # Run npm install with verbose logging and additional flags for debugging
 RUN npm install --legacy-peer-deps --no-audit --no-fund --verbose || true
